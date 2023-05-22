@@ -4,120 +4,55 @@ import (
 	"context"
 	"fmt"
 	clientv3 "go.etcd.io/etcd/client/v3"
-	"net"
-	"strconv"
-	"strings"
+	"log"
 	"time"
 )
 
-type RegEtcd struct {
-	cli    *clientv3.Client
-	ctx    context.Context
-	cancel context.CancelFunc
-	key    string
-}
-
-var rEtcd *RegEtcd
-
-// "%s:///%s/"
-func GetPrefix(schema, serviceName string) string {
-	return fmt.Sprintf("%s:///%s/", schema, serviceName)
-}
-
-// "%s:///%s"
-func GetPrefix4Unique(schema, serviceName string) string {
-	return fmt.Sprintf("%s:///%s", schema, serviceName)
-}
-
-// "%s:///%s/" ->  "%s:///%s:ip:port"
-func RegisterEtcd4Unique(schema, etcdAddr, myHost string, myPort int, serviceName string, ttl int) error {
-	serviceName = serviceName + ":" + net.JoinHostPort(myHost, strconv.Itoa(myPort))
-	return RegisterEtcd(schema, etcdAddr, myHost, myPort, serviceName, ttl)
-}
-
-// etcdAddr separated by commas
-func RegisterEtcd(schema, etcdAddr, myHost string, myPort int, serviceName string, ttl int) error {
-	//operationID := utils.OperationIDGenerator()
-	//args := schema + " " + etcdAddr + " " + myHost + " " + serviceName + " " + utils.Int32ToString(int32(myPort))
-	ttl = ttl * 3
+// RegisterEtcd registers the service with etcd.
+func RegisterEtcd(endpoints []string, serviceName string, serviceAddress string, ttl int64) error {
+	// Create a new etcd client
 	cli, err := clientv3.New(clientv3.Config{
-		Endpoints: strings.Split(etcdAddr, ","), DialTimeout: 5 * time.Second})
-
-	//log.Info(operationID, "RegisterEtcd args: ", args, ttl)
+		Endpoints:   endpoints,
+		DialTimeout: 5 * time.Second,
+	})
 	if err != nil {
-		//log.Error(operationID, "clientv3.New failed ", args, ttl, err.Error())
-		return fmt.Errorf("create etcd clientv3 client failed, errmsg:%v, etcd addr:%s", err, etcdAddr)
+		return fmt.Errorf("failed to create etcd client: %v", err)
 	}
+	defer cli.Close()
 
-	//lease
-	ctx, cancel := context.WithCancel(context.Background())
-	resp, err := cli.Grant(ctx, int64(ttl))
+	// Create a lease with a given TTL
+	resp, err := cli.Grant(context.TODO(), ttl)
 	if err != nil {
-		//log.Error(operationID, "Grant failed ", err.Error(), ctx, ttl)
-		return fmt.Errorf("grant failed")
-	}
-	//log.Info(operationID, "Grant ok, resp ID ", resp.ID)
-
-	//  schema:///serviceName/ip:port ->ip:port
-	serviceValue := net.JoinHostPort(myHost, strconv.Itoa(myPort))
-	serviceKey := GetPrefix(schema, serviceName) //+ serviceValue
-
-	//set key->value
-	if _, err := cli.Put(ctx, serviceKey, serviceValue, clientv3.WithLease(resp.ID)); err != nil {
-		//log.Error(operationID, "cli.Put failed ", err.Error(), ctx, args, resp.ID)
-		return fmt.Errorf("put failed, errmsg:%v， key:%s, value:%s", err, serviceKey, serviceValue)
+		return fmt.Errorf("failed to create lease: %v", err)
 	}
 
-	//keepalive
-	kresp, err := cli.KeepAlive(ctx, resp.ID)
+	// Register the service with the lease ID
+	key := fmt.Sprintf("/services/%s", serviceName)
+	value := serviceAddress
+	_, err = cli.Put(context.TODO(), key, value, clientv3.WithLease(resp.ID))
 	if err != nil {
-		//log.Error(operationID, "KeepAlive failed ", err.Error(), args, resp.ID)
-		return fmt.Errorf("keepalive failed, errmsg:%v, lease id:%d", err, resp.ID)
+		return fmt.Errorf("failed to register service: %v", err)
 	}
-	//log.Info(operationID, "RegisterEtcd ok ", args)
 
+	// Keep the lease alive in the background
+	keepAliveCh, err := cli.KeepAlive(context.TODO(), resp.ID)
+	if err != nil {
+		return fmt.Errorf("failed to start lease keep-alive: %v", err)
+	}
+
+	// Start a goroutine to monitor lease keep-alive updates
 	go func() {
 		for {
 			select {
-			case _, ok := <-kresp:
-				if ok == true {
-					//log.Debug(operationID, "KeepAlive kresp ok", pv, args)
-				} else {
-					//log.Error(operationID, "KeepAlive kresp failed ", pv, args)
-					t := time.NewTicker(time.Duration(ttl/2) * time.Second)
-					for {
-						select {
-						case <-t.C:
-						}
-						ctx, _ := context.WithCancel(context.Background())
-						resp, err := cli.Grant(ctx, int64(ttl))
-						if err != nil {
-							//log.Error(operationID, "Grant failed ", err.Error(), args)
-							continue
-						}
-
-						if _, err := cli.Put(ctx, serviceKey, serviceValue, clientv3.WithLease(resp.ID)); err != nil {
-							//log.Error(operationID, "etcd Put failed ", err.Error(), args, " resp ID: ", resp.ID)
-							continue
-						} else {
-							//log.Info(operationID, "etcd Put ok ", args, " resp ID: ", resp.ID)
-						}
-					}
+			case _, ok := <-keepAliveCh:
+				if !ok {
+					log.Printf("Lease keep-alive channel closed")
+					return
 				}
 			}
 		}
 	}()
 
-	rEtcd = &RegEtcd{ctx: ctx,
-		cli:    cli,
-		cancel: cancel,
-		key:    serviceKey}
-
+	log.Printf("Service '%s' registered with etcd", serviceName)
 	return nil
-}
-
-func UnRegisterEtcd() {
-	//delete
-	rEtcd.cancel()
-	rEtcd.cli.Delete(rEtcd.ctx, rEtcd.key)
 }

@@ -12,7 +12,7 @@ COPY . .
 
 RUN go build -o ../../build/userAuth-grpc
 
-EXPOSE 50051
+EXPOSE 10021
 
 # Set the entry point for the container
 CMD ["/build/userAuth-grpc"]

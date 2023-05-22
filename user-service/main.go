@@ -18,7 +18,7 @@ func main() {
 	//
 	//key := fmt.Sprintf("%s:///%s/", "fishOn", "UserAuth")
 	////"fishOn:///UserAuth/"
-	////_, err = client.Put(context.Background(), key, "0.0.0.0:50051")
+	////_, err = client.Put(context.Background(), key, "0.0.0.0:10021")
 	////if err != nil {
 	////	log.Fatal(err)
 	////}
