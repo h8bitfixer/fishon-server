@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+option go_package = "./userAuth;userAuth";
+package userAuth;
+
+service UserAuth {
+  rpc GetOTP(GetOTPRequest) returns (GetOTPResponse);
+}
+
+message GetOTPRequest {
+  string phoneNumber = 1;
+}
+
+message GetOTPResponse {
+  string pinToken = 1;
+  int32 status = 2;
+}
