@@ -2,10 +2,11 @@ package internal
 
 import (
 	"context"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
-	"log"
 	"net"
 	"strconv"
+	"userAuth-grpc/pkg/db"
 	"userAuth-grpc/proto/userAuth"
 )
 
@@ -46,15 +47,23 @@ func (userAuthServer *UserAuthServer) Run() {
 	//}
 	err = srv.Serve(listener)
 	if err != nil {
-		log.Println(err.Error())
+		log.Error().Err(err)
 		return
 	}
 }
 
 func (userAuthServer *UserAuthServer) GetOTP(ctx context.Context, in *userAuth.GetOTPRequest) (*userAuth.GetOTPResponse, error) {
 	otpResp := userAuth.GetOTPResponse{
-		PinToken: "TestingToken",
+		PinToken: in.GetPhoneNumber(),
 		Status:   1,
 	}
+	// Set a key-value pair in Redis
+	err := db.GetRedisDB().Set(ctx, "phoneNumber", in.PhoneNumber, 0).Err()
+	if err != nil {
+		otpResp.Status = 2
+		log.Error().AnErr("Failed to set value in Redis: %v\n", err)
+		return &otpResp, err
+	}
+
 	return &otpResp, nil
 }

@@ -3,25 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"userAuth-grpc/internal"
+	"userAuth-grpc/pkg/db"
 )
 
 func main() {
-	//lis, err := net.Listen("tcp", ":10021")
-	//if err != nil {
-	//	log.Fatalf("Failed to listen: %v", err)
-	//}
-	//
-	//grpcServer := grpc.NewServer()
-	//userAuthServer := internal.UserAuthServer{}
-	//userAuth.RegisterUserAuthServer(grpcServer, &userAuthServer)
-	//
-	//if err := grpcServer.Serve(lis); err != nil {
-	//}
+	err := db.InitializeMySQL()
+	if err != nil {
+		log.Error().AnErr("Failed to initialize MySQL: %v\n", err)
+	}
+	err = db.InitializeRedis()
+	if err != nil {
+		log.Error().AnErr("Failed to initialize Redis: %v\n", err)
+	}
 
-	//log.NewPrivateLog(constant.OpenImAuthLog)
-	//defaultPorts := config.Config.RpcPort.OpenImAuthPort
-	//rpcPort := flag.Int("port", defaultPorts[0], "RpcToken default listen port 10800")
 	rpcPort := flag.Int("port", 10021, "RpcToken default listen port 10800")
 	flag.Parse()
 	fmt.Println("start auth rpc server, port: ", *rpcPort)
