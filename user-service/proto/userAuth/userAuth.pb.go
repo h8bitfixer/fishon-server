@@ -123,6 +123,258 @@ func (x *GetOTPResponse) GetStatus() int32 {
 	return 0
 }
 
+type VerifyOTPRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PinToken string `protobuf:"bytes,1,opt,name=pinToken,proto3" json:"pinToken,omitempty"`
+	Otp      string `protobuf:"bytes,2,opt,name=otp,proto3" json:"otp,omitempty"`
+}
+
+func (x *VerifyOTPRequest) Reset() {
+	*x = VerifyOTPRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_userAuth_userAuth_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VerifyOTPRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyOTPRequest) ProtoMessage() {}
+
+func (x *VerifyOTPRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_userAuth_userAuth_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyOTPRequest.ProtoReflect.Descriptor instead.
+func (*VerifyOTPRequest) Descriptor() ([]byte, []int) {
+	return file_userAuth_userAuth_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *VerifyOTPRequest) GetPinToken() string {
+	if x != nil {
+		return x.PinToken
+	}
+	return ""
+}
+
+func (x *VerifyOTPRequest) GetOtp() string {
+	if x != nil {
+		return x.Otp
+	}
+	return ""
+}
+
+type VerifyOTPResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status      int32  `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	PhoneNumber string `protobuf:"bytes,2,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
+}
+
+func (x *VerifyOTPResponse) Reset() {
+	*x = VerifyOTPResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_userAuth_userAuth_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *VerifyOTPResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyOTPResponse) ProtoMessage() {}
+
+func (x *VerifyOTPResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_userAuth_userAuth_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyOTPResponse.ProtoReflect.Descriptor instead.
+func (*VerifyOTPResponse) Descriptor() ([]byte, []int) {
+	return file_userAuth_userAuth_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *VerifyOTPResponse) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *VerifyOTPResponse) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+type GetUserAccountByPhoneRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PhoneNumber string `protobuf:"bytes,1,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
+}
+
+func (x *GetUserAccountByPhoneRequest) Reset() {
+	*x = GetUserAccountByPhoneRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_userAuth_userAuth_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUserAccountByPhoneRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserAccountByPhoneRequest) ProtoMessage() {}
+
+func (x *GetUserAccountByPhoneRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_userAuth_userAuth_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserAccountByPhoneRequest.ProtoReflect.Descriptor instead.
+func (*GetUserAccountByPhoneRequest) Descriptor() ([]byte, []int) {
+	return file_userAuth_userAuth_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetUserAccountByPhoneRequest) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+type GetUserAccountByPhoneResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserID      uint32 `protobuf:"varint,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	PhoneNumber string `protobuf:"bytes,3,opt,name=phoneNumber,proto3" json:"phoneNumber,omitempty"`
+	Email       string `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	Password    string `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
+	Age         int32  `protobuf:"varint,6,opt,name=age,proto3" json:"age,omitempty"`
+	Gender      int32  `protobuf:"varint,7,opt,name=gender,proto3" json:"gender,omitempty"`
+}
+
+func (x *GetUserAccountByPhoneResponse) Reset() {
+	*x = GetUserAccountByPhoneResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_userAuth_userAuth_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetUserAccountByPhoneResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserAccountByPhoneResponse) ProtoMessage() {}
+
+func (x *GetUserAccountByPhoneResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_userAuth_userAuth_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserAccountByPhoneResponse.ProtoReflect.Descriptor instead.
+func (*GetUserAccountByPhoneResponse) Descriptor() ([]byte, []int) {
+	return file_userAuth_userAuth_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetUserAccountByPhoneResponse) GetUserID() uint32 {
+	if x != nil {
+		return x.UserID
+	}
+	return 0
+}
+
+func (x *GetUserAccountByPhoneResponse) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *GetUserAccountByPhoneResponse) GetPhoneNumber() string {
+	if x != nil {
+		return x.PhoneNumber
+	}
+	return ""
+}
+
+func (x *GetUserAccountByPhoneResponse) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *GetUserAccountByPhoneResponse) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *GetUserAccountByPhoneResponse) GetAge() int32 {
+	if x != nil {
+		return x.Age
+	}
+	return 0
+}
+
+func (x *GetUserAccountByPhoneResponse) GetGender() int32 {
+	if x != nil {
+		return x.Gender
+	}
+	return 0
+}
+
 var File_userAuth_userAuth_proto protoreflect.FileDescriptor
 
 var file_userAuth_userAuth_proto_rawDesc = []byte{
@@ -137,11 +389,48 @@ var file_userAuth_userAuth_proto_rawDesc = []byte{
 	0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x69, 0x6e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x69, 0x6e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12,
 	0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52,
-	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x32, 0x47, 0x0a, 0x08, 0x55, 0x73, 0x65, 0x72, 0x41,
+	0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x40, 0x0a, 0x10, 0x56, 0x65, 0x72, 0x69, 0x66,
+	0x79, 0x4f, 0x54, 0x50, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x70,
+	0x69, 0x6e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70,
+	0x69, 0x6e, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x10, 0x0a, 0x03, 0x6f, 0x74, 0x70, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6f, 0x74, 0x70, 0x22, 0x4d, 0x0a, 0x11, 0x56, 0x65, 0x72,
+	0x69, 0x66, 0x79, 0x4f, 0x54, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16,
+	0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
+	0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x20, 0x0a, 0x0b, 0x70, 0x68, 0x6f, 0x6e, 0x65, 0x4e,
+	0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x68, 0x6f,
+	0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0x40, 0x0a, 0x1c, 0x47, 0x65, 0x74, 0x55,
+	0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x79, 0x50, 0x68, 0x6f, 0x6e,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x70, 0x68, 0x6f, 0x6e,
+	0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70,
+	0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x22, 0xc9, 0x01, 0x0a, 0x1d, 0x47,
+	0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x79, 0x50,
+	0x68, 0x6f, 0x6e, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x75, 0x73, 0x65, 0x72, 0x49, 0x44, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x75, 0x73,
+	0x65, 0x72, 0x49, 0x44, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x70, 0x68, 0x6f, 0x6e,
+	0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70,
+	0x68, 0x6f, 0x6e, 0x65, 0x4e, 0x75, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d,
+	0x61, 0x69, 0x6c, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c,
+	0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x05, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x10, 0x0a, 0x03,
+	0x61, 0x67, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x05, 0x52, 0x03, 0x61, 0x67, 0x65, 0x12, 0x16,
+	0x0a, 0x06, 0x67, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06,
+	0x67, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x32, 0xf7, 0x01, 0x0a, 0x08, 0x55, 0x73, 0x65, 0x72, 0x41,
 	0x75, 0x74, 0x68, 0x12, 0x3b, 0x0a, 0x06, 0x47, 0x65, 0x74, 0x4f, 0x54, 0x50, 0x12, 0x17, 0x2e,
 	0x75, 0x73, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x2e, 0x47, 0x65, 0x74, 0x4f, 0x54, 0x50, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x41, 0x75, 0x74,
 	0x68, 0x2e, 0x47, 0x65, 0x74, 0x4f, 0x54, 0x50, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x44, 0x0a, 0x09, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x4f, 0x54, 0x50, 0x12, 0x1a, 0x2e,
+	0x75, 0x73, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x4f,
+	0x54, 0x50, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x75, 0x73, 0x65, 0x72,
+	0x41, 0x75, 0x74, 0x68, 0x2e, 0x56, 0x65, 0x72, 0x69, 0x66, 0x79, 0x4f, 0x54, 0x50, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x68, 0x0a, 0x15, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65,
+	0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x79, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x12,
+	0x26, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73,
+	0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x79, 0x50, 0x68, 0x6f, 0x6e, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x27, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x41, 0x75,
+	0x74, 0x68, 0x2e, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x42, 0x79, 0x50, 0x68, 0x6f, 0x6e, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
 	0x42, 0x15, 0x5a, 0x13, 0x2e, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x3b, 0x75,
 	0x73, 0x65, 0x72, 0x41, 0x75, 0x74, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
@@ -158,16 +447,24 @@ func file_userAuth_userAuth_proto_rawDescGZIP() []byte {
 	return file_userAuth_userAuth_proto_rawDescData
 }
 
-var file_userAuth_userAuth_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_userAuth_userAuth_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_userAuth_userAuth_proto_goTypes = []interface{}{
-	(*GetOTPRequest)(nil),  // 0: userAuth.GetOTPRequest
-	(*GetOTPResponse)(nil), // 1: userAuth.GetOTPResponse
+	(*GetOTPRequest)(nil),                 // 0: userAuth.GetOTPRequest
+	(*GetOTPResponse)(nil),                // 1: userAuth.GetOTPResponse
+	(*VerifyOTPRequest)(nil),              // 2: userAuth.VerifyOTPRequest
+	(*VerifyOTPResponse)(nil),             // 3: userAuth.VerifyOTPResponse
+	(*GetUserAccountByPhoneRequest)(nil),  // 4: userAuth.GetUserAccountByPhoneRequest
+	(*GetUserAccountByPhoneResponse)(nil), // 5: userAuth.GetUserAccountByPhoneResponse
 }
 var file_userAuth_userAuth_proto_depIdxs = []int32{
 	0, // 0: userAuth.UserAuth.GetOTP:input_type -> userAuth.GetOTPRequest
-	1, // 1: userAuth.UserAuth.GetOTP:output_type -> userAuth.GetOTPResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: userAuth.UserAuth.VerifyOTP:input_type -> userAuth.VerifyOTPRequest
+	4, // 2: userAuth.UserAuth.GetUserAccountByPhone:input_type -> userAuth.GetUserAccountByPhoneRequest
+	1, // 3: userAuth.UserAuth.GetOTP:output_type -> userAuth.GetOTPResponse
+	3, // 4: userAuth.UserAuth.VerifyOTP:output_type -> userAuth.VerifyOTPResponse
+	5, // 5: userAuth.UserAuth.GetUserAccountByPhone:output_type -> userAuth.GetUserAccountByPhoneResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -203,6 +500,54 @@ func file_userAuth_userAuth_proto_init() {
 				return nil
 			}
 		}
+		file_userAuth_userAuth_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VerifyOTPRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_userAuth_userAuth_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*VerifyOTPResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_userAuth_userAuth_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserAccountByPhoneRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_userAuth_userAuth_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetUserAccountByPhoneResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -210,7 +555,7 @@ func file_userAuth_userAuth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_userAuth_userAuth_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

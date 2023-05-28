@@ -5,3 +5,9 @@ type OTPRequest struct {
 	PhoneNumber string `json:"phoneNumber" binding:"required,max=11"`
 	RequestID   string `json:"requestID"`
 }
+
+type OTPVerifyRequest struct {
+	PinToken  string `json:"pinToken" binding:"required"`
+	Otp       string `json:"otp" binding:"required"`
+	RequestID string `json:"requestID"`
+}

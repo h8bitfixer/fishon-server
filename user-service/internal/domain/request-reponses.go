@@ -7,5 +7,10 @@ type CommResp struct {
 
 type CommDataResp struct {
 	CommResp
-	Data map[string]interface{} `json:"data"`
+	Data interface{} `json:"data"`
+}
+
+type GetOTPResponse struct {
+	PinToken string `json:"pinToken"`
+	Status   int32  `json:"status"`
 }

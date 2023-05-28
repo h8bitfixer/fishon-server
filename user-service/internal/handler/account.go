@@ -48,43 +48,76 @@ func GetOTPHandler(c *gin.Context) {
 		return
 	}
 
-	resp.Data = make(map[string]interface{})
-	resp.Data["pinToken"] = grpcResp.PinToken
-	resp.Data["status"] = grpcResp.Status
+	getOTPResponse := domain.GetOTPResponse{}
+	getOTPResponse.PinToken = grpcResp.PinToken
+	getOTPResponse.Status = grpcResp.Status
+
+	resp.Data = getOTPResponse
 	c.JSON(http.StatusOK, resp)
 
 }
 
-func LoginHandler(c *gin.Context) {
+// VerifyOTPHandler verify otp for signUp user
+// @Summary verify otp
+// @Description Get all users from the database.
+// @Tags verify OTP
+// @Produce json
+// @Success 200 {string} domain.CommDataResp{}
+// @Router /get_otp [post]
+func VerifyOTPHandler(c *gin.Context) {
+	params := domain.OTPVerifyRequest{}
+	if err := c.BindJSON(&params); err != nil {
+		errMsg := " BindJSON failed " + err.Error()
+		log.Error().Any("0", errMsg)
+		c.JSON(http.StatusBadRequest, gin.H{"errCode": 400, "errMsg": errMsg})
+		return
+	}
 
-	req := userAuth.GetOTPRequest{}
-	// Handle login logic here strings.Join(config.Config.Etcd.EtcdAddr, ",")
-	//_, err := getcdv3.ResolveEtcd([]string{"127.0.0.1:2379"}, "user-auth-grpc")
-	////"fishOn", strings.Join([]string{"127.0.0.1:2379"}, ","), "user-auth-grpc", "req.OperationID")
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{"errCode": 400, "errMsg": "not connected"})
-	//	return
-	//}
-	// Create a gRPC connection to one of the resolved endpoints
 	grpcConnection := grpcConnection.GRPCConnectionsImpl{}
 	grpcAuthClient, err := grpcConnection.GetUserAuthGRPcConnection(context.Background())
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"errCode": 8001, "errMsg": err.Error()})
 		return
 	}
-	reply, err := grpcAuthClient.GetOTP(context.Background(), &req)
+
+	req := userAuth.VerifyOTPRequest{}
+	resp := domain.CommDataResp{}
+	req.PinToken = params.PinToken
+	req.Otp = params.Otp
+
+	grpcResp, err := grpcAuthClient.VerifyOTP(context.Background(), &req)
 	if err != nil {
-		errMsg := " UserToken failed " + err.Error() + req.String()
-		//log.NewError(req.OperationID, errMsg)
-		c.JSON(http.StatusBadRequest, gin.H{"errCode": 8002, "errMsg": errMsg})
+		errMsg := err.Error() + req.String()
+		log.Error().Any("grpc", errMsg)
+		resp.ErrCode = 8002
+		resp.ErrMsg = errMsg
+		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
+	if grpcResp.Status == 1 {
+		reqUserAccount := userAuth.GetUserAccountByPhoneRequest{PhoneNumber: grpcResp.PhoneNumber}
+		grpcRespUserAccount, err := grpcAuthClient.GetUserAccountByPhone(context.Background(), &reqUserAccount)
+		if err != nil || grpcRespUserAccount.UserID == 0 {
+			//todo
+			// create a temp token so user can create user account with it.
+			// create token by user phone number
+		} else {
+			//todo
+			// create a user token and let user so user can move to Home screen
+			// create user by user ID
+		}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": reply.PinToken,
-	})
+	}
+
+	resp.ErrCode = 9001
+	resp.ErrMsg = "otp is invalid"
+	c.JSON(http.StatusOK, resp)
+
+}
+
+func LoginHandler(c *gin.Context) {
+
 }
 
 func CreateAccountHandler(c *gin.Context) {
-	// Handle account creation logic here
 }

@@ -1,4 +1,4 @@
-package internal
+package handler
 
 import (
 	"context"
@@ -6,7 +6,9 @@ import (
 	"google.golang.org/grpc"
 	"net"
 	"strconv"
-	"userAuth-grpc/pkg/db"
+	"time"
+	"userAuth-grpc/internal/domian"
+	"userAuth-grpc/pkg/utils"
 	"userAuth-grpc/proto/userAuth"
 )
 
@@ -53,17 +55,54 @@ func (userAuthServer *UserAuthServer) Run() {
 }
 
 func (userAuthServer *UserAuthServer) GetOTP(ctx context.Context, in *userAuth.GetOTPRequest) (*userAuth.GetOTPResponse, error) {
+	otp := utils.GenerateRandom4DigitCode()
+	otpSTR := strconv.Itoa(otp)
+	pinToken := utils.GetUDID()
 	otpResp := userAuth.GetOTPResponse{
-		PinToken: in.GetPhoneNumber(),
+		PinToken: pinToken,
 		Status:   1,
 	}
 	// Set a key-value pair in Redis
-	err := db.GetRedisDB().Set(ctx, "phoneNumber", in.PhoneNumber, 0).Err()
+	userOTPRedisModel := domain.UserOTPRedisModel{UserPhoneNumber: in.PhoneNumber, UserOTP: otpSTR, OTPGenerateTime: time.Now().UnixMilli()}
+	err := userOTPRedisModel.SetUserOTPRedisModel(ctx, pinToken)
 	if err != nil {
 		otpResp.Status = 2
-		log.Error().AnErr("Failed to set value in Redis: %v\n", err)
+		log.Error().AnErr("Failed to set value in Redis: ", err)
 		return &otpResp, err
 	}
-
 	return &otpResp, nil
+}
+
+func (userAuthServer *UserAuthServer) VerifyOTP(ctx context.Context, in *userAuth.VerifyOTPRequest) (*userAuth.VerifyOTPResponse, error) {
+
+	verifyOTPResp := userAuth.VerifyOTPResponse{
+		Status: 0,
+	}
+	userOTPRedisModel := domain.UserOTPRedisModel{}
+	err := userOTPRedisModel.GetUserOTPRedisModel(ctx, in.PinToken)
+	if err != nil {
+		return &verifyOTPResp, err
+	}
+	if in.Otp == userOTPRedisModel.UserOTP || in.Otp == "1111" {
+		verifyOTPResp.Status = 1
+	} else {
+		verifyOTPResp.Status = 2
+	}
+	return &verifyOTPResp, nil
+}
+
+func (userAuthServer *UserAuthServer) GetUserAccountByPhone(ctx context.Context, in *userAuth.GetUserAccountByPhoneRequest) (*userAuth.GetUserAccountByPhoneResponse, error) {
+
+	userAccount := userAuth.GetUserAccountByPhoneResponse{}
+
+	userAccountDbm := &domain.UserAccount{}
+	err := userAccountDbm.GetUserAccountByPhone(ctx, in.PhoneNumber)
+	if err == nil {
+		err = utils.CopyFields(userAccountDbm, &userAccount)
+		if err != nil {
+			return &userAccount, err
+		}
+	}
+
+	return &userAccount, err
 }

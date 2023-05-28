@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/rs/zerolog/log"
-	"userAuth-grpc/internal"
+	"userAuth-grpc/internal/handler"
 	"userAuth-grpc/pkg/db"
 )
 
@@ -21,6 +21,6 @@ func main() {
 	rpcPort := flag.Int("port", 10021, "RpcToken default listen port 10800")
 	flag.Parse()
 	fmt.Println("start auth rpc server, port: ", *rpcPort)
-	userAuthServer := internal.NewRpcUserAuthServer(*rpcPort)
+	userAuthServer := handler.NewRpcUserAuthServer(*rpcPort)
 	userAuthServer.Run()
 }
