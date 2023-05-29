@@ -13,7 +13,7 @@ func SetupRoutes(router *gin.Engine) {
 		v1.POST("/get_otp", handler.GetOTPHandler)
 		v1.POST("/verify_otp", handler.VerifyOTPHandler)
 
-		v1.GET("/login", middleware.JWTAuth(), handler.LoginHandler)
-		v1.POST("/create-account", middleware.JWTAuth(), handler.CreateAccountHandler)
+		v1.POST("/create-account", middleware.JWTAuthByPhone(), handler.CreateAccountHandler)
+		v1.POST("/login", handler.LoginHandler)
 	}
 }

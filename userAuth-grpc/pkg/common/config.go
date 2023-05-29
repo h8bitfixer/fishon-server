@@ -19,9 +19,12 @@ var (
 var Config config
 
 type config struct {
-	Environment     string `yaml:"environment"`
-	UserServiceIP   string `yaml:"user-service-ip"`
-	UserServicePort string `yaml:"user-service-port"`
+	Environment string `yaml:"environment"`
+
+	JwtAuthKeyUserID string `yaml:"jwt-auth-key-user-id"`
+	JwtAuthKeyPhone  string `yaml:"jwt-auth-key-phone"`
+	UserServiceIP    string `yaml:"user-service-ip"`
+	UserServicePort  string `yaml:"user-service-port"`
 
 	ServerIP       string `yaml:"serverip"`
 	IsSkipDatabase bool   `yaml:"is_skip_database"`

@@ -7,6 +7,11 @@ service UserAuth {
   rpc GetOTP(GetOTPRequest) returns (GetOTPResponse);
   rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
   rpc GetUserAccountByPhone(GetUserAccountByPhoneRequest) returns (GetUserAccountByPhoneResponse);
+  rpc GetTokenByPhone(GetTokenByPhoneRequest) returns (GetTokenByPhoneResponse);
+  rpc GetTokenByUserID(GetTokenByUserIDRequest) returns (GetTokenByUserIDResponse);
+
+  rpc VerifyUserEmailAndPassword(VerifyUserEmailAndPasswordRequest) returns (GetUserAccountByPhoneResponse);
+  rpc CreateUserByEmail(CreateUserByEmailRequest) returns (CreateUserByEmailResponse);
 }
 
 message GetOTPRequest {
@@ -31,7 +36,7 @@ message GetUserAccountByPhoneRequest {
   string phoneNumber = 1;
 }
 
-message GetUserAccountByPhoneResponse {
+message UserAccount {
   uint32 userID = 1;
   string name = 2;
   string phoneNumber = 3;
@@ -39,4 +44,42 @@ message GetUserAccountByPhoneResponse {
   string password = 5;
   int32 age = 6;
   int32 gender = 7;
+}
+
+message GetUserAccountByPhoneResponse {
+  UserAccount UserAccount = 1;
+}
+
+message GetTokenByPhoneRequest{
+  string phoneNumber = 1;
+}
+
+message GetTokenByPhoneResponse{
+  string token = 1;
+}
+
+message GetTokenByUserIDRequest{
+  uint32 userID = 1;
+}
+
+message GetTokenByUserIDResponse{
+  string token = 1;
+  uint32 userID = 2;
+}
+
+message VerifyUserEmailAndPasswordRequest{
+  string email = 1;
+  string password = 2;
+}
+
+message VerifyUserEmailAndPasswordResponse {
+  UserAccount UserAccount = 1;
+}
+
+message CreateUserByEmailRequest {
+  UserAccount UserAccount = 1;
+}
+
+message CreateUserByEmailResponse {
+  UserAccount UserAccount = 1;
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/go-redis/redis/v8"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	domain "userAuth-grpc/internal/domian"
 	config "userAuth-grpc/pkg/common"
 )
 
@@ -47,17 +46,6 @@ func InitializeMySQL() error {
 	// Perform additional MySQL-specific setup or configurations
 	sqlDB, _ = mysqlDB.DB()
 	fmt.Println("open db ok ", dsn)
-	mysqlDB.AutoMigrate(
-		&domain.UserAccount{},
-	)
-
-	mysqlDB.Set("gorm:table_options", "CHARSET=utf8mb4")
-	mysqlDB.Set("gorm:table_options", "collation=utf8mb4_unicode_ci")
-
-	if !mysqlDB.Migrator().HasTable(&domain.UserAccount{}) {
-		fmt.Println("CreateTable UserAccount")
-		mysqlDB.Migrator().CreateTable(&domain.UserAccount{})
-	}
 
 	return nil
 }

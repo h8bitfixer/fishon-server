@@ -3,18 +3,21 @@ package middleware
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/rs/zerolog/log"
+	"net/http"
 	"user-service/pkg/utils"
 )
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userID, _ := ValidateUser(c, "operationID")
-		//if errValidation != nil {
-		//	log.Debug().Msgf("", "GetUserIDFromToken false ", c.Request.Header.Get("token"))
-		//	c.Abort()
-		//	return
-		//}
+		userID, errValidation := ValidateUser(c, "operationID")
+		if errValidation != nil {
+			log.Debug().Msgf("", "GetUserIDFromToken false ", c.Request.Header.Get("token"))
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+			return
+		}
 		log.Debug().Msgf("0", "userID: ", userID)
 		c.Set("userID", userID)
 		c.Next()
@@ -41,4 +44,34 @@ func ValidateUser(c *gin.Context, operationID string) (string, error) {
 	//}
 
 	return "userID", nil
+}
+
+func JWTAuthByPhone() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userID, errValidation := validateUserByPhoneToken(c, "operationID")
+		if errValidation != nil {
+			log.Debug().Msgf("", "GetUserIDFromToken false ", c.Request.Header.Get("token"))
+			c.Status(http.StatusUnauthorized)
+			c.Abort()
+			return
+		}
+		log.Debug().Msgf("0", "userID: ", userID)
+		c.Set("phone", userID)
+		c.Next()
+	}
+}
+
+func validateUserByPhoneToken(c *gin.Context, operationID string) (string, error) {
+	token := c.GetHeader("token")
+	if token == "" {
+		log.Debug().Msgf(operationID, utils.GetSelfFuncName(), "token is nil")
+		return "", errors.New("token is nil")
+	}
+	claims, err := GetPhoneJWTManager().VerifyToken(token)
+	if err != nil {
+		return "", errors.New("token is not valid")
+	}
+	clm := claims.(jwt.MapClaims)
+	phone := clm["phone"].(string)
+	return phone, nil
 }

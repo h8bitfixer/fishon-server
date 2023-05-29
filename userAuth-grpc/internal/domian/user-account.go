@@ -8,13 +8,13 @@ import (
 )
 
 type UserAccount struct {
-	UserID      uint           `gorm:"column:user_id;primaryKey;autoIncrement"`
+	UserID      uint32         `gorm:"column:user_id;primaryKey;autoIncrement"`
 	Name        string         `gorm:"column:name;not null"`
 	PhoneNumber string         `gorm:"column:phone_number;unique;not null"`
 	Email       string         `gorm:"column:email;unique;not null"`
 	Password    string         `gorm:"column:password;not null"`
-	Age         int64          `gorm:"column:ago"`
-	Gender      int64          `gorm:"column:gender"`
+	Age         int32          `gorm:"column:ago"`
+	Gender      int32          `gorm:"column:gender"`
 	CreatedAt   int64          `gorm:"column:created_at"`
 	UpdatedAt   int64          `gorm:"column:updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;index"`
@@ -34,7 +34,17 @@ func (userAccount *UserAccount) UnmarshalJSON(data string) error {
 	return json.Unmarshal([]byte(data), userAccount)
 }
 
-func (userAccount *UserAccount) GetUserAccountByPhone(ctx context.Context, phoneNumber string) error {
-	err := db.GetMySQLDB().Where("phone = ?", phoneNumber).First(userAccount).Error
+func (userAccount *UserAccount) GetUserAccountByPhone(_ context.Context, phoneNumber string) error {
+	err := db.GetMySQLDB().Where("phone_number = ?", phoneNumber).First(userAccount).Error
+	return err
+}
+
+func (userAccount *UserAccount) GetUserAccountByEmail(_ context.Context, email string) error {
+	err := db.GetMySQLDB().Where("email = ?", email).First(userAccount).Error
+	return err
+}
+
+func (userAccount *UserAccount) CreateUSerAccount(_ context.Context) error {
+	err := db.GetMySQLDB().Create(userAccount).Error
 	return err
 }

@@ -7,6 +7,9 @@ serverversion: 2.3.0
 #environment: DEV,TEST,PROD, DEV will use the server ip for the internal http request, TEST & PROD will use the request.host for the internal http request, so nginx need to add host to the header
 environment : DEV
 
+jwt-auth-key-user-id : "zsbxd5dk2"
+jwt-auth-key-phone : "xesad2"
+
 user-service-ip : ""
 user-service-port : "10011"
 

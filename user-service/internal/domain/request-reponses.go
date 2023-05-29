@@ -14,3 +14,9 @@ type GetOTPResponse struct {
 	PinToken string `json:"pinToken"`
 	Status   int32  `json:"status"`
 }
+
+type VerifyOTPResponse struct {
+	Token       string       `json:"token"`
+	TempToken   bool         `json:"tempToken"`
+	UserAccount *UserAccount `json:"userAccount,omitempty"`
+}
