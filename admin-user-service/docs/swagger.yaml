@@ -1,0 +1,22 @@
+basePath: /user/v1
+host: localhost:10011
+info:
+  contact: {}
+  description: Apis for login, signup
+  title: User Account
+  version: "2"
+paths:
+  /get_otp:
+    post:
+      description: Get all users from the database.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get otp
+      tags:
+      - OTP
+swagger: "2.0"

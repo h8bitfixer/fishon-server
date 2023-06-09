@@ -1,0 +1,68 @@
+# The class cannot be named by Pascal or camel case.
+# The class cannot be named by Pascal or camel case.
+# If it is not used, the corresponding structure will not be set,
+# and it will not be read naturally.
+serverversion: 2.3.0
+#---------------Infrastructure configuration---------------------#
+#environment: DEV,TEST,PROD, DEV will use the server ip for the internal http request, TEST & PROD will use the request.host for the internal http request, so nginx need to add host to the header
+environment : DEV
+
+jwt-auth-key-user-id : "zsbxd5dk2"
+jwt-auth-key-phone : "xesad2"
+
+admin-user-service-ip : ""
+admin-user-service-port : "10015"
+
+etcd:
+  etcdSchema: fishon  #默认即可
+  etcdAddr: [ 127.0.0.1:2379 ] #单机部署时，默认即可
+#Skip init all database, set it true when u need to run the ethgrpc unit test, otherwise set it false
+is_skip_database: false
+
+
+k8sMod: false #开启k8s模式 使用pod里面环境变量请求services调用服务 而并非etcd
+
+mysql:
+  dbMysqlAddress: [ 127.0.0.1:3306 ] #mysql地址 目前仅支持单机，默认即可
+  dbMysqlUserName: root #mysql用户名，建议修改
+  dbMysqlPassword: openIM # mysql密码，建议修改
+  dbMysqlDatabaseName: bytechat #默认即可
+  dbTableName: eMsg #默认即可
+  dbMsgTableNum: 1
+  dbMaxOpenConns: 20
+  dbMaxIdleConns: 10
+  dbMaxLifeTime: 120
+
+mongo:
+  dbUri: ""#当dbUri值不为空则直接使用该值
+  dbAddress: 127.0.0.1:37017  #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+  dbDirect: false
+  dbTimeout: 60
+  dbDatabase: bytechat  #mongo db 默认即可
+  dbSource: admin
+  dbUserName:   #mongo用户名，建议先不设置
+  dbPassword:   #mongo密码，建议先不设置
+  dbMaxPoolSize: 100
+  dbRetainChatRecords: 3650 #mongo保存离线消息时间（天），根据需求修改
+
+redis:
+  dbAddress: [ 127.0.0.1:16379 ] #redis地址 单机时，填写一个地址即可，使用redis集群时候，填写集群中多个节点地址（主从地址都可以填写，增加容灾能力），默认即可
+  dbMaxIdle: 128
+  dbMaxActive: 0
+  dbIdleTimeout: 120
+  dbPassWord: 123456 #redis密码 建议修改
+  enableCluster: false #如果外部redis以集群方式启动，需要打开此开关
+
+#---------------Internal service configuration---------------------#
+
+serverip: 0.0.0.0
+
+rpcRegisterIP: 0.0.0.0
+listenIP: 0.0.0.0
+
+secret: tuoyun
+
+callbackAfterSendMsg:
+  switch: true
+  expireTime: 300 #5分钟后不能撤回
+

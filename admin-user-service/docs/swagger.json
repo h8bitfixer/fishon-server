@@ -1,0 +1,33 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Apis for login, signup",
+        "title": "User Account",
+        "contact": {},
+        "version": "2"
+    },
+    "host": "localhost:10011",
+    "basePath": "/user/v1",
+    "paths": {
+        "/get_otp": {
+            "post": {
+                "description": "Get all users from the database.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OTP"
+                ],
+                "summary": "get otp",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
