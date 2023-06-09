@@ -10,7 +10,24 @@ services:
       - fishOn-network
     depends_on:
       - user-auth-grpc
+      - etcd
+      - redis
+      - mysql
     # Add any other environment variables or configurations specific to service1
+
+  admin-user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "10015:10015"
+    networks:
+      - fishOn-network
+    depends_on:
+      - user-auth-grpc
+      - etcd
+      - redis
+      - mysql
 
   user-auth-grpc:
     build:
